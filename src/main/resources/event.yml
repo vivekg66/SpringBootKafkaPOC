@@ -1,0 +1,14 @@
+services:
+  - name: UserService
+    events:
+      - type: USER_CREATED
+        requiredAttributes:
+          - name: eventType
+            valuePath: $eventType
+            responseAttribute: event
+          - name: name
+            valuePath: $.user.name
+            response: false
+        action:
+          service: User Notification
+          destination: notification-topic

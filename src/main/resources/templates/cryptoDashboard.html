@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Live Crypto Prices</title>
+    <meta http-equiv="refresh" content="5"> <!-- Auto-refresh -->
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 60%;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .price-up {
+            color: green;
+            font-weight: bold;
+        }
+
+        .price-down {
+            color: red;
+            font-weight: bold;
+        }
+
+        .price-same {
+            color: gray;
+        }
+
+        /* Spinner styles */
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loader-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body onload="hideLoader()">
+
+<!-- Spinner while page loads -->
+<div id="loader-container">
+    <div class="loader"></div>
+    <p>Loading latest prices...</p>
+</div>
+
+<h2>📈 Live Crypto Prices (Updated Every 5 Seconds)</h2>
+
+<table>
+    <tr>
+        <th>Symbol</th>
+        <th>Price (USDT)</th>
+    </tr>
+    <tr th:each="price : ${prices}">
+        <td th:text="${price.symbol}"></td>
+        <td th:with="current=${price.price}, last=${lastPrices[price.symbol]}"
+            th:classappend="${#numbers.formatDecimal(current, 2, 8) > #numbers.formatDecimal(last, 2, 8) ? 'price-up' :
+                            (#numbers.formatDecimal(current, 2, 8) < #numbers.formatDecimal(last, 2, 8) ? 'price-down' : 'price-same')}"
+            th:text="${#numbers.formatDecimal(price.price, 2, 8)}">
+        </td>
+    </tr>
+</table>
+
+<script>
+    // Hide loader after DOM loads
+    function hideLoader() {
+        const loader = document.getElementById("loader-container");
+        if (loader) loader.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

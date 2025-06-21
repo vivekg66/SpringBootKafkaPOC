@@ -1,7 +1,6 @@
 package com.event_handler.event_handler_ms.publisher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class KafkaPublisher implements Publish {
 
 
     @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaWikiTemplate;
 
     @Autowired
     private ObjectMapper mapper = new ObjectMapper();
@@ -27,7 +26,7 @@ public class KafkaPublisher implements Publish {
     @Override
     public void processEvent(String destination,Map<String, Object> eventMessage) {
         try {
-            kafkaTemplate.send(destination, eventMessage);
+            kafkaWikiTemplate.send(destination, eventMessage);
             log.info("message for event {} , published successfully",eventMessage.get("eventType"));
         } catch (Exception e) {
 

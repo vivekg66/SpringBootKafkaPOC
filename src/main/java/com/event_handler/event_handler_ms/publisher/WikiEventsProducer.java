@@ -27,12 +27,11 @@ public class WikiEventsProducer {
     @Value("${topic.wiki}")
     private String wikiTopic;
     @Autowired
-    private KafkaTemplate<String,String> kafkaTemplate;
+    private KafkaTemplate<String,String> kafkaWikiTemplate;
 
 
     public void sendWikiData() throws InterruptedException {
-        EventHandler eventHandler = new WikiEventHandler(kafkaTemplate,wikiTopic);
-
+        EventHandler eventHandler = new WikiEventHandler(kafkaWikiTemplate,wikiTopic);
         EventSource eventSource = new EventSource.Builder(eventHandler, URI.create(wikiMediaUrl)).build();
         eventSource.start();
         logger.info("Stream Started..!!!");
@@ -40,7 +39,7 @@ public class WikiEventsProducer {
         scheduledExecutorService.schedule(()-> {
             logger.info("Stopping Stream after a minute...!!!!!");
             eventSource.close();
-        },20,TimeUnit.SECONDS);
+        },10,TimeUnit.SECONDS);
         TimeUnit.MINUTES.sleep(1);
     }
 

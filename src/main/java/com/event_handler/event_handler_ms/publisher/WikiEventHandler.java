@@ -7,37 +7,37 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 public class WikiEventHandler implements EventHandler {
 
-    private final KafkaTemplate<String,String> kafkaTemplate;
+    private final KafkaTemplate<String,String> kafkaWikiTemplate;
     private final String topic;
 
     public WikiEventHandler(KafkaTemplate<String, String> kafkaTemplate, String topic) {
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaWikiTemplate = kafkaTemplate;
         this.topic = topic;
     }
 
     @Override
     public void onOpen() throws Exception {
-
+        // TODO document why this method is empty
     }
 
     @Override
     public void onClosed() throws Exception {
-
+        // TODO document why this method is empty
     }
 
     @Override
     public void onMessage(String s, MessageEvent messageEvent) throws Exception {
         String data = messageEvent.getData();
-        kafkaTemplate.send(topic,data);
+        kafkaWikiTemplate.send(topic,data);
     }
 
     @Override
     public void onComment(String s) throws Exception {
-
+        // TODO document why this method is empty
     }
 
     @Override
     public void onError(Throwable throwable) {
-
+        // TODO document why this method is empty
     }
 }
